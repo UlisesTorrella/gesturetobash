@@ -3,8 +3,8 @@ import mediapipe as mp
 from collections import deque
 import sys
 
-if len(sys.argv)<2:
-  print("You need to tellme the name of the gesture")
+if len(sys.argv)<3:
+  print("You need to tellme the name of the gesture and the bash command to run")
   exit()
 
 mp_drawing = mp.solutions.drawing_utils
@@ -110,17 +110,24 @@ ys = [y/maxy for y in ys]
 print("This is our compressed gesture")
 print(xs, ys, zs)
 
+_, name, *command = sys.argv
+
 print("writing file...")
-file = open(f"gestures/{sys.argv[1]}.py", 'w')
+file = open(f"gestures/{name}.py", 'w')
 file.write(
   f'''
 from gestures.Gesture import Gesture
 
 
-class {sys.argv[1]}(Gesture):
-    xs = {xs}
-    ys = {ys}
-    zs = {zs}
+class {name}(Gesture):
+  command = {command}
+
+  xs = {xs}
+  ys = {ys}
+  zs = {zs}
   '''
 )
 file.close()
+
+initfile = open(f"gestures/__init__.py", 'a')
+initfile.write(f"\nfrom .{name} import {name} ")

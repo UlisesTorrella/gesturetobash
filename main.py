@@ -37,7 +37,7 @@ with mp_hands.Hands(
           
           pid = os.fork()
           if pid > 0:
-            process = subprocess.Popen(command.split())
+            process = subprocess.Popen(command)
             output, error = process.communicate()
             exit              
           skip = 10

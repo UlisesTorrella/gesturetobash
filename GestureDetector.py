@@ -1,19 +1,13 @@
-
-from gestures.ok import ok
-from gestures.fingergun import FingerGun
+import inspect
+import gestures
 
 
 class GestureDetector:
-    gestures = [FingerGun, ok]
-
-    commands ={
-        FingerGun: "brave-browser",
-        ok: "gedit"
-    }
-
+    gestures = [c[1] for c in inspect.getmembers(gestures, inspect.isclass)]
+    
     def findGesture(self, sample, imgH, imgW):
         for gesture in self.gestures:
             if gesture().match(sample, imgH, imgW):
-                return gesture, self.commands[gesture]
+                return gesture, gesture.command
         return None, None
         
