@@ -33,7 +33,6 @@ class Gesture():
       diffzs.append((self.zs[i] - zs[i])**2)
     
     tol = 0.01
-    print(sum(diffxs)/21, sum(diffys)/21, sum(diffzs)/21)
     if sum(diffxs)/21 < tol and sum(diffys)/21<tol:
       return True
     return False
