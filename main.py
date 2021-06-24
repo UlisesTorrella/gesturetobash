@@ -30,8 +30,9 @@ with mp_hands.Hands(
     image.flags.writeable = True
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     if results.multi_hand_landmarks:
-      if detector.findGesture(results.multi_hand_landmarks[0], imgH, imgW):
-        print("FOUND")
+      gesture = detector.findGesture(results.multi_hand_landmarks[0], imgH, imgW)
+      if gesture:
+        print(gesture.__name__)
         break
       for hand_landmarks in results.multi_hand_landmarks:
         mp_drawing.draw_landmarks(

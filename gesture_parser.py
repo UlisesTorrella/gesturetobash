@@ -1,7 +1,12 @@
 import cv2
 import mediapipe as mp
 from collections import deque
-import pdb
+import sys
+
+if len(sys.argv)<2:
+  print("You need to tellme the name of the gesture")
+  exit()
+
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
@@ -104,3 +109,18 @@ ys = [y/maxy for y in ys]
 
 print("This is our compressed gesture")
 print(xs, ys, zs)
+
+print("writing file...")
+file = open(f"gestures/{sys.argv[1]}.py", 'w')
+file.write(
+  f'''
+from gestures.Gesture import Gesture
+
+
+class {sys.argv[1]}(Gesture):
+    xs = {xs}
+    ys = {ys}
+    zs = {zs}
+  '''
+)
+file.close()
