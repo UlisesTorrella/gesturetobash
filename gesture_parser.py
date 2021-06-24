@@ -3,6 +3,8 @@ import mediapipe as mp
 from collections import deque
 import sys
 
+from landmarks_utils import average_landmarks, compare_landmarks
+
 if len(sys.argv)<3:
   print("You need to tellme the name of the gesture and the bash command to run")
   exit()
@@ -16,31 +18,6 @@ last5 = deque(maxlen=5)
 gesture_landmarks = []
 # For webcam input:
 cap = cv2.VideoCapture(0)
-
-def average_landmarks(hands):
-  result = []
-  if len(hands)>1:
-    for i in range(21):
-      xs = [landmarks[i]['x'] for landmarks in hands]
-      ys = [landmarks[i]['y'] for landmarks in hands]
-      zs = [landmarks[i]['z'] for landmarks in hands]
-      result.append({
-        'x': sum(xs)/len(xs),
-        'y': sum(ys)/len(ys),
-        'z': sum(zs)/len(zs)
-      })
-  return result
-  
-  
-
-def compare_landmarks(a, b):
-  xs, ys, zs = [], [], []
-  # pdb.set_trace()
-  for i in range(21):
-    xs.append((a[i]['x'] - b[i]['x'])**2)
-    ys.append((a[i]['y'] - b[i]['y'])**2)
-    zs.append((a[i]['z'] - b[i]['z'])**2)
-  return sum(xs)/21, sum(ys)/21, sum(zs)/21
 
 with mp_hands.Hands(
     max_num_hands=1,

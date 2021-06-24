@@ -3,7 +3,7 @@ import pdb
 class Gesture():
   xs, ys, zs = [], [], []
   
-  def match(self, sample, imgH, imgW):
+  def match(self, sample, imgH, imgW, end=False):
     landmarks = []
     for land_mark in sample.landmark:
         xPos, yPos, z = int(land_mark.x * imgW), int(land_mark.y * imgH), land_mark.z
@@ -27,10 +27,18 @@ class Gesture():
     # pdb.set_trace()
 
     diffxs, diffys, diffzs = [], [], []
-    for i in range(21):
-      diffxs.append((self.xs[i] - xs[i])**2)
-      diffys.append((self.ys[i] - ys[i])**2)
-      diffzs.append((self.zs[i] - zs[i])**2)
+
+    if end:
+      for i in range(21):
+        diffxs.append((self.end_xs[i] - xs[i])**2)
+        diffys.append((self.end_ys[i] - ys[i])**2)
+        diffzs.append((self.end_zs[i] - zs[i])**2)
+    else: 
+      for i in range(21):
+        diffxs.append((self.xs[i] - xs[i])**2)
+        diffys.append((self.ys[i] - ys[i])**2)
+        diffzs.append((self.zs[i] - zs[i])**2)
+      
     
     tol = 0.01
     if sum(diffxs)/21 < tol and sum(diffys)/21<tol:
