@@ -7,6 +7,8 @@ if len(sys.argv)<3:
   print("You need to tellme the name of the gesture and the bash command to run")
   exit()
 
+print("\033[92mHold your gesture until the process ends\033[0m")
+
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
@@ -63,8 +65,6 @@ with mp_hands.Hands(
     image.flags.writeable = True
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     if results.multi_hand_landmarks:
-      # print(results.multi_hand_landmarks)
-      # pdb.set_trace( )
       hand = results.multi_hand_landmarks[0]
       mp_drawing.draw_landmarks(
           image, hand, mp_hands.HAND_CONNECTIONS)
@@ -74,10 +74,8 @@ with mp_hands.Hands(
         landmarks.append({'x': xPos, 'y': yPos, 'z': z})
       if len(last5)>1:
         cx, cy, cz = compare_landmarks(a=average_landmarks(last5), b=landmarks)
-        print(cx, cy, cz)
         if cx<1 and cy<1 and cz<0.5:
           gesture_landmarks = landmarks
-          print(imgH, imgW, imgC)
           break
       last5.append(landmarks)
     cv2.imshow('MediaPipe Hands', image)
@@ -131,3 +129,5 @@ file.close()
 
 initfile = open(f"gestures/__init__.py", 'a')
 initfile.write(f"\nfrom .{name} import {name} ")
+
+print("Go try it runnign \033[92m python main.py \033[0m")
