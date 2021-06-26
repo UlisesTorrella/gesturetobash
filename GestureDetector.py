@@ -1,3 +1,4 @@
+import pdb
 from gestures.MovingGesture import MovingGesture
 import inspect
 import gestures
@@ -13,7 +14,7 @@ class GestureDetector:
         g, c = None, None
         for gesture in self.gestures:
             if gesture().match(sample, imgH, imgW):
-                if gesture==gestures.MovingGesture:
+                if issubclass(gesture, MovingGesture):
                     return gesture, self.moving_gesture_flag
                 else:
                     g, c = gesture, gesture.command

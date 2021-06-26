@@ -41,3 +41,8 @@ def scale_landmarks(landmarks):
     'y': ys,
     'z': zs
   }
+
+  
+def is_same_gesture(a, b):
+  cx, cy, cz = compare_landmarks(a, b)
+  return cx<1 and cy<1 and cz<0.5

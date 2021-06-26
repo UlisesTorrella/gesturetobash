@@ -1,1 +1,3 @@
-from .MovingGesture import MovingGesture 
+
+from .swipe import swipe 
+from .up import up 

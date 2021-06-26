@@ -3,7 +3,7 @@ import mediapipe as mp
 from collections import deque
 import sys
 
-from landmarks_utils import average_landmarks, compare_landmarks
+from landmarks_utils import average_landmarks, compare_landmarks, scale_landmarks
 
 if len(sys.argv)<3:
   print("You need to tellme the name of the gesture and the bash command to run")
@@ -63,27 +63,9 @@ cap.release()
 print("This are the landmarks of the scanned gesture")
 print(gesture_landmarks)
 
-# I will flatten it on the x,y and z axis
-xs, ys, zs = [], [], []
-for mark in gesture_landmarks:
-  xs.append(mark['x'])
-  ys.append(mark['y'])
-  zs.append(mark['z'])
 
-# And take them to the origin, except z
-minx = min(xs)
-xs = [x - minx for x in xs]
-miny = min(ys)
-ys = [y - miny for y in ys]
+scale_landmarks = scale_landmarks(gesture_landmarks)
 
-# Now the biggest value of each list is the hand scale
-maxx = max(xs)
-xs = [x/maxx for x in xs]
-maxy = max(ys)
-ys = [y/maxy for y in ys]
-
-print("This is our compressed gesture")
-print(xs, ys, zs)
 
 _, name, *command = sys.argv
 
@@ -97,9 +79,9 @@ from gestures.Gesture import Gesture
 class {name}(Gesture):
   command = {command}
 
-  xs = {xs}
-  ys = {ys}
-  zs = {zs}
+  xs = {scale_landmarks['x']}
+  ys = {scale_landmarks['y']}
+  zs = {scale_landmarks['z']}
   '''
 )
 file.close()

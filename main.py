@@ -1,3 +1,4 @@
+import pdb
 import gestures
 from GestureDetector import GestureDetector
 import cv2
@@ -5,6 +6,7 @@ import mediapipe as mp
 import subprocess
 import os
 from landmarks_utils import scale_landmarks
+from collections import defaultdict 
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
@@ -14,6 +16,16 @@ skip = 0 # used to skip frames after a gesture is executed
 detector = GestureDetector()
 record_movement = False
 movements = []
+displacement = defaultdict(list)
+
+def fork_it():
+  pid = os.fork()
+  if pid > 0:
+    process = subprocess.Popen(command)
+    output, error = process.communicate()
+    exit              
+  skip = 10
+
 # For webcam input:
 cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
@@ -41,14 +53,23 @@ with mp_hands.Hands(
           for land_mark in hand.landmark:
             xPos, yPos, z = int(land_mark.x * imgW), int(land_mark.y * imgH), land_mark.z
             landmarks.append({'x': xPos, 'y': yPos, 'z': z})
+          displacement['x'].append(landmarks[0]['x']/imgW)
+          displacement['y'].append(landmarks[0]['y']/imgH)
+          displacement['z'].append(landmarks[0]['z'])
           landmarks = scale_landmarks(landmarks)
           movements.append(landmarks)
           if detector.isGesture(end_gesture, results.multi_hand_landmarks[0], imgH, imgW, True):
             record_movement = False
-            if gesture().match_movement(0.05, movements):
-              print("ESE SI")
+            minx = min(displacement['x'])
+            displacement['x'] = [x-minx for x in displacement['x']]
+            miny = min(displacement['y'])
+            displacement['y'] = [y-miny for y in displacement['y']]
+            command = gesture().match_movement(0.05, 0.05, movements, displacement)
+            if command:
+              fork_it()
             print(len(movements))
             movements = []
+            displacement = defaultdict(list)
         else:
           gesture, command = detector.findGesture(results.multi_hand_landmarks[0], imgH, imgW)
           if gesture:
@@ -56,12 +77,7 @@ with mp_hands.Hands(
               record_movement = True
               end_gesture = gesture
             else:
-              pid = os.fork()
-              if pid > 0:
-                process = subprocess.Popen(command)
-                output, error = process.communicate()
-                exit              
-              skip = 10
+              fork_it()
 
         for hand_landmarks in results.multi_hand_landmarks:
           mp_drawing.draw_landmarks(
