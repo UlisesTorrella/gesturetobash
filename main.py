@@ -24,7 +24,6 @@ def fork_it():
     process = subprocess.Popen(command)
     output, error = process.communicate()
     exit              
-  skip = 10
 
 # For webcam input:
 cap = cv2.VideoCapture(0)
@@ -78,6 +77,8 @@ with mp_hands.Hands(
               end_gesture = gesture
             else:
               fork_it()
+              skip = 10
+
 
         for hand_landmarks in results.multi_hand_landmarks:
           mp_drawing.draw_landmarks(
