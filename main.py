@@ -17,6 +17,7 @@ detector = GestureDetector()
 record_movement = False
 movements = []
 displacement = defaultdict(list)
+movement_timer = 0
 
 def fork_it():
   subprocess.call(command)        
@@ -32,6 +33,8 @@ with mp_hands.Hands(
     if not success:
       print("Ignoring empty camera frame.")
       continue
+    if record_movement:
+      movement_timer+=1
     if skip>0:
       skip -= 1
     else: 
@@ -43,6 +46,12 @@ with mp_hands.Hands(
       image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
       if results.multi_hand_landmarks:
         if record_movement:
+          if movement_timer>50:
+            print("timer expired")
+            movement_timer = 0
+            record_movement = False
+            movements = []
+            displacement = defaultdict(list)
           hand = results.multi_hand_landmarks[0]
           landmarks = []
           for land_mark in hand.landmark:

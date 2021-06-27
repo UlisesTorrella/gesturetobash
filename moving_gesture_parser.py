@@ -16,7 +16,7 @@ print("\033[92mHold your gesture until the process ends\033[0m")
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
-last5 = deque(maxlen=5)
+last5 = deque(maxlen=50)
 start_gesture_landmarks = []
 # For webcam input:
 cap = cv2.VideoCapture(0)
@@ -53,7 +53,6 @@ with mp_hands.Hands(
       if len(last5)>1:
         cx, cy, cz = compare_landmarks(a=average_landmarks(last5), b=landmarks)
         if cx<1 and cy<1 and cz<0.5:
-          
           if store_movement: 
             if not is_same_gesture(a=start_gesture_landmarks, b=landmarks):
               end_gesture_landmarks = landmarks
