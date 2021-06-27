@@ -19,11 +19,7 @@ movements = []
 displacement = defaultdict(list)
 
 def fork_it():
-  pid = os.fork()
-  if pid > 0:
-    process = subprocess.Popen(command)
-    output, error = process.communicate()
-    exit              
+  subprocess.call(command)        
 
 # For webcam input:
 cap = cv2.VideoCapture(0)

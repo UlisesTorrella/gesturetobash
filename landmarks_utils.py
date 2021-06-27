@@ -45,4 +45,4 @@ def scale_landmarks(landmarks):
   
 def is_same_gesture(a, b):
   cx, cy, cz = compare_landmarks(a, b)
-  return cx<1 and cy<1 and cz<0.5
+  return cx<2 and cy<2 and cz<0.5

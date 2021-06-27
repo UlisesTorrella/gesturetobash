@@ -53,15 +53,16 @@ with mp_hands.Hands(
       if len(last5)>1:
         cx, cy, cz = compare_landmarks(a=average_landmarks(last5), b=landmarks)
         if cx<1 and cy<1 and cz<0.5:
-          print("Start recording movement until next stop:")
           
-          if store_movement and not is_same_gesture(a=start_gesture_landmarks, b=landmarks):
-            end_gesture_landmarks = landmarks
-            break
-          print("When the countdown ends start the movement")
-          countdown(5)
-          start_gesture_landmarks = landmarks
-          store_movement = True
+          if store_movement: 
+            if not is_same_gesture(a=start_gesture_landmarks, b=landmarks):
+              end_gesture_landmarks = landmarks
+              break
+          else:
+            print("When the countdown ends start the movement")
+            countdown(5)
+            start_gesture_landmarks = landmarks
+            store_movement = True
       last5.append(landmarks)
       if store_movement:
         movement.append(landmarks)
