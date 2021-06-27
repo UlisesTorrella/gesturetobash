@@ -26,7 +26,7 @@ def fork_it():
 cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
     max_num_hands=1,
-    min_detection_confidence=0.7,
+    min_detection_confidence=0.5,
     min_tracking_confidence=0.5) as hands:
   while cap.isOpened():
     success, image = cap.read()
@@ -46,7 +46,7 @@ with mp_hands.Hands(
       image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
       if results.multi_hand_landmarks:
         if record_movement:
-          if movement_timer>50:
+          if movement_timer>100:
             print("timer expired")
             movement_timer = 0
             record_movement = False
@@ -78,6 +78,7 @@ with mp_hands.Hands(
           gesture, command = detector.findGesture(results.multi_hand_landmarks[0], imgH, imgW)
           if gesture:
             if (command==GestureDetector.moving_gesture_flag):
+              print(f"Recording: {gesture}")
               record_movement = True
               end_gesture = gesture
             else:

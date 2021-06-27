@@ -16,7 +16,7 @@ print("\033[92mHold your gesture until the process ends\033[0m")
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
-last5 = deque(maxlen=50)
+last5 = deque(maxlen=5)
 start_gesture_landmarks = []
 # For webcam input:
 cap = cv2.VideoCapture(0)
