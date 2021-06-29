@@ -25,3 +25,6 @@ from .swiperight import swiperight
 from .swipeleft import swipeleft 
 from .swiperight import swiperight 
 from .swiperight import swiperight 
+from .phone import phone 
+from .swipeleft import swipeleft 
+from .swiperight import swiperight 

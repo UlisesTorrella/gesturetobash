@@ -20,7 +20,7 @@ displacement = defaultdict(list)
 movement_timer = 0
 
 def fork_it():
-  subprocess.call(command)        
+  subprocess.Popen(command)
 
 # For webcam input:
 cap = cv2.VideoCapture(0)
