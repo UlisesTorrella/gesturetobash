@@ -6,12 +6,17 @@ The project is made as a playground where you can parse static and moving gestur
 
 This can be done as follows:
 
-`python3 moving_gesture_parser.py swipeleft xdotool key super+Left`
+`python moving_gesture_parser.py swipeleft xdotool key super+Left`
 
-`python3 gesture_gesture_parser.py ok gnome-terminal`
+`python gesture_gesture_parser.py ok gnome-terminal`
 
 Then running:
 
-`python3 main.py`
+`python main.py`
 
 you can try them out.
+
+
+### Heres a video preview
+https://user-images.githubusercontent.com/5643677/125218062-732a7200-e298-11eb-99cf-faece5805f0d.mov
+
